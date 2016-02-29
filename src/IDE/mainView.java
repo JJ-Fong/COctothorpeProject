@@ -239,7 +239,7 @@ public class mainView extends javax.swing.JFrame {
     }
     
     private void code() {  
-        System.out.println("ESTAS LOCO");
+        System.out.println("ESTAS LOCO 2.0");
         System.out.println("Code selected"); 
         jScrollPane2.setViewportView(tarea);
         tarea.setText(program);
