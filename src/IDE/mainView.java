@@ -25,10 +25,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * @author Javier Fong
  */
 public class mainView extends javax.swing.JFrame {
-    String program; 
+    String program,error,filename; 
     JTextArea tarea; 
     JTree arbol; 
-    String error; 
     int actual; 
     /**
      * Creates new form mainView
@@ -239,8 +238,8 @@ public class mainView extends javax.swing.JFrame {
     }
     
     private void code() {  
-        System.out.println("ESTAS LOCO 2.0");
         System.out.println("Code selected"); 
+        tarea = new JTextArea(); 
         jScrollPane2.setViewportView(tarea);
         tarea.setText(program);
     }
