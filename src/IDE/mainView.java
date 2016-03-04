@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -34,6 +35,7 @@ public class mainView extends javax.swing.JFrame {
      */
     public mainView() {
         initComponents();
+        filename = "";
         program = ""; 
         error = "";
         actual = -1; 
@@ -75,6 +77,11 @@ public class mainView extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jList1);
 
         jButton1.setText("Compile");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jMenuBar1.setToolTipText("");
         jMenuBar1.setName(""); // NOI18N
@@ -118,19 +125,20 @@ public class mainView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1040, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(13, 13, 13)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1079, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 674, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
+            .addComponent(jScrollPane2)
         );
 
         pack();
@@ -140,11 +148,12 @@ public class mainView extends javax.swing.JFrame {
         // TODO add your handling code here:
         String aux="";   
         try {
-            JFileChooser file=new JFileChooser("C://Users//Javier Fong//Desktop");
+            JFileChooser file=new JFileChooser("C:\\Users\\Javier Fong\\Documents\\Universidad\\2016\\Ciclo 1\\Clases\\Compiladores\\Pruebas\\");
             file.showOpenDialog(this);
             File abre=file.getSelectedFile();
 
-            if(abre!=null) {     
+            if(abre!=null) {   
+                filename = abre.getAbsolutePath();
                 FileReader archivos=new FileReader(abre);
                 BufferedReader lee=new BufferedReader(archivos);
                 while((aux=lee.readLine())!=null){
@@ -180,9 +189,44 @@ public class mainView extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        
+        this.saveText(); 
+        if (filename.equals("")) { 
+            JFileChooser fileSaver = new JFileChooser("C:\\Users\\Javier Fong\\Documents\\Universidad\\2016\\Ciclo 1\\Clases\\Compiladores\\Pruebas\\");
+            fileSaver.setDialogTitle("SAVE FILE");
+            int userSelection = fileSaver.showSaveDialog(this);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileSaver.getSelectedFile();
+                filename = fileToSave.getAbsolutePath();
+                try {
+                    PrintWriter writer = new PrintWriter(filename,"UTF-8");
+                    writer.println(program);
+                    writer.close();
+                    System.out.println("SAVE SUCCESFUL");
+                } catch (Exception e) {
+                    System.out.println("SAVE UNSUCCESFUL");
+                }
+            } 
+        } else {
+            try {
+                PrintWriter writer = new PrintWriter(filename,"UTF-8");
+                writer.println(program);
+                writer.close();
+                System.out.println("SAVE SUCCESFUL");
+            } catch (Exception e) {
+                System.out.println("SAVE UNSUCCESFUL");
+            }
+        }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        compile();
+    }//GEN-LAST:event_jButton1ActionPerformed
     
+    public void saveText() {
+        program = tarea.getText(); 
+    }
     /**
      * @param args the command line arguments
      */
