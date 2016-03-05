@@ -1,5 +1,6 @@
-// Generated from C:\Users\Javier Fong\Desktop\Universidad\2016\Ciclo 1\Clases\Compiladores\COctothorpeProject\src\Grammar\expDecaf2.g4 by ANTLR 4.4
+// Generated from C:\Users\Javier Fong\Documents\Universidad\2016\Ciclo 1\Clases\Compiladores\COctothorpeProject\src\Grammar\expDecaf2.g4 by ANTLR 4.4
 package Grammar;
+
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -48,11 +49,23 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#relop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelop(@NotNull expDecaf2Parser.RelopContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBlock(@NotNull expDecaf2Parser.BlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#add_Exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAdd_Exp(@NotNull expDecaf2Parser.Add_ExpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#varType}.
 	 * @param ctx the parse tree
@@ -60,11 +73,11 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarType(@NotNull expDecaf2Parser.VarTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expDecaf2Parser#rel_op}.
+	 * Visit a parse tree produced by {@link expDecaf2Parser#rel_Exp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRel_op(@NotNull expDecaf2Parser.Rel_opContext ctx);
+	T visitRel_Exp(@NotNull expDecaf2Parser.Rel_ExpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#arg}.
 	 * @param ctx the parse tree
@@ -78,11 +91,23 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParameter(@NotNull expDecaf2Parser.ParameterContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#addop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddop(@NotNull expDecaf2Parser.AddopContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#bool_literal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBool_literal(@NotNull expDecaf2Parser.Bool_literalContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValue(@NotNull expDecaf2Parser.ValueContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#parameterType}.
 	 * @param ctx the parse tree
@@ -95,12 +120,6 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExpressionA(@NotNull expDecaf2Parser.ExpressionAContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link expDecaf2Parser#cond_op}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCond_op(@NotNull expDecaf2Parser.Cond_opContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#methodDeclaration}.
 	 * @param ctx the parse tree
@@ -120,17 +139,17 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclaration(@NotNull expDecaf2Parser.DeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expDecaf2Parser#op}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOp(@NotNull expDecaf2Parser.OpContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#int_literal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInt_literal(@NotNull expDecaf2Parser.Int_literalContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#mult_Exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMult_Exp(@NotNull expDecaf2Parser.Mult_ExpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#char_literal}.
 	 * @param ctx the parse tree
@@ -144,29 +163,35 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatement(@NotNull expDecaf2Parser.StatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expDecaf2Parser#arith_op}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArith_op(@NotNull expDecaf2Parser.Arith_opContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#program}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitProgram(@NotNull expDecaf2Parser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expDecaf2Parser#eq_op}.
+	 * Visit a parse tree produced by {@link expDecaf2Parser#conditionalop}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEq_op(@NotNull expDecaf2Parser.Eq_opContext ctx);
+	T visitConditionalop(@NotNull expDecaf2Parser.ConditionalopContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#negate_Exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNegate_Exp(@NotNull expDecaf2Parser.Negate_ExpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#structDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStructDeclaration(@NotNull expDecaf2Parser.StructDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#mulop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMulop(@NotNull expDecaf2Parser.MulopContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#literal}.
 	 * @param ctx the parse tree

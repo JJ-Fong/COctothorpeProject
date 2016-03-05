@@ -15,7 +15,6 @@ COMMENTS: '//' ~('\r' | '\n' )*  -> channel(HIDDEN);
 WS : [ \t\r\n\f | ' '| '\r' | '\n' | '\t']+  ->channel(HIDDEN); 
 
 CHAR: (LETTER|DIGIT|' '| '!' | '"' | '#' | '$' | '%' | '&' | '\'' | '(' | ')' | '*' | '+' 
-
 | ',' | '-' | '.' | '/' | ':' | ';' | '<' | '=' | '>' | '?' | '@' | '[' | '\\' | ']' | '^' | '_' | '`'| '{' | '|' | '}' | '~' 
 '\t'| '\n' | '\"' | '\'');
 
@@ -55,7 +54,25 @@ expressionA: expression | ;
 
 location : (ID|ID '[' expression ']') ('.' location)?  ;
 
-expression : location | methodCall | literal | expression op expression | '-' expression | '!' expression | '('expression')'  ;
+expression : rel_Exp conditionalop expression | rel_Exp;
+
+rel_Exp : add_Exp relop rel_Exp | add_Exp; 
+
+add_Exp : mult_Exp addop add_Exp  |  mult_Exp; 
+
+mult_Exp : negate_Exp mulop mult_Exp | negate_Exp; 
+
+negate_Exp : '-' value  | '!'  value  |  value;
+
+conditionalop : '&&' | '||';
+
+relop : '<=' | '<' | '>' | '>=' | '==' | '!=';
+
+addop : '+' | '-';
+
+mulop : '*' | '/' | '%';
+
+value :  literal | '(' expression ')' | methodCall | location;
 
 methodCall :    ID '(' arg1 ')' ;
 
@@ -64,16 +81,6 @@ arg1    :   arg2 | ;
 arg2    :   (arg) (',' arg)* ;
 
 arg :   expression;
-
-op: arith_op | rel_op | eq_op | cond_op  ;
-
-arith_op : '+' | '-' | '*' | '/' | '%' ;
-
-rel_op : '<' | '>' | '<=' | '>=' ;
-
-eq_op : '==' | '!=' ;
-
-cond_op : '&&' | '||' ;
 
 literal : int_literal | char_literal | bool_literal ;
 

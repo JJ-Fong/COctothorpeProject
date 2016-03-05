@@ -1,5 +1,6 @@
-// Generated from C:\Users\Javier Fong\Desktop\Universidad\2016\Ciclo 1\Clases\Compiladores\COctothorpeProject\src\Grammar\expDecaf2.g4 by ANTLR 4.4
+// Generated from C:\Users\Javier Fong\Documents\Universidad\2016\Ciclo 1\Clases\Compiladores\COctothorpeProject\src\Grammar\expDecaf2.g4 by ANTLR 4.4
 package Grammar;
+
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -69,6 +70,16 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 */
 	void exitMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#relop}.
+	 * @param ctx the parse tree
+	 */
+	void enterRelop(@NotNull expDecaf2Parser.RelopContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#relop}.
+	 * @param ctx the parse tree
+	 */
+	void exitRelop(@NotNull expDecaf2Parser.RelopContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#block}.
 	 * @param ctx the parse tree
 	 */
@@ -78,6 +89,16 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBlock(@NotNull expDecaf2Parser.BlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#add_Exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterAdd_Exp(@NotNull expDecaf2Parser.Add_ExpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#add_Exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitAdd_Exp(@NotNull expDecaf2Parser.Add_ExpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#varType}.
 	 * @param ctx the parse tree
@@ -89,15 +110,15 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 */
 	void exitVarType(@NotNull expDecaf2Parser.VarTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expDecaf2Parser#rel_op}.
+	 * Enter a parse tree produced by {@link expDecaf2Parser#rel_Exp}.
 	 * @param ctx the parse tree
 	 */
-	void enterRel_op(@NotNull expDecaf2Parser.Rel_opContext ctx);
+	void enterRel_Exp(@NotNull expDecaf2Parser.Rel_ExpContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expDecaf2Parser#rel_op}.
+	 * Exit a parse tree produced by {@link expDecaf2Parser#rel_Exp}.
 	 * @param ctx the parse tree
 	 */
-	void exitRel_op(@NotNull expDecaf2Parser.Rel_opContext ctx);
+	void exitRel_Exp(@NotNull expDecaf2Parser.Rel_ExpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#arg}.
 	 * @param ctx the parse tree
@@ -119,6 +140,16 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 */
 	void exitParameter(@NotNull expDecaf2Parser.ParameterContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#addop}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddop(@NotNull expDecaf2Parser.AddopContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#addop}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddop(@NotNull expDecaf2Parser.AddopContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#bool_literal}.
 	 * @param ctx the parse tree
 	 */
@@ -128,6 +159,16 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBool_literal(@NotNull expDecaf2Parser.Bool_literalContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#value}.
+	 * @param ctx the parse tree
+	 */
+	void enterValue(@NotNull expDecaf2Parser.ValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#value}.
+	 * @param ctx the parse tree
+	 */
+	void exitValue(@NotNull expDecaf2Parser.ValueContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#parameterType}.
 	 * @param ctx the parse tree
@@ -148,16 +189,6 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionA(@NotNull expDecaf2Parser.ExpressionAContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expDecaf2Parser#cond_op}.
-	 * @param ctx the parse tree
-	 */
-	void enterCond_op(@NotNull expDecaf2Parser.Cond_opContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expDecaf2Parser#cond_op}.
-	 * @param ctx the parse tree
-	 */
-	void exitCond_op(@NotNull expDecaf2Parser.Cond_opContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#methodDeclaration}.
 	 * @param ctx the parse tree
@@ -189,16 +220,6 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 */
 	void exitDeclaration(@NotNull expDecaf2Parser.DeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expDecaf2Parser#op}.
-	 * @param ctx the parse tree
-	 */
-	void enterOp(@NotNull expDecaf2Parser.OpContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expDecaf2Parser#op}.
-	 * @param ctx the parse tree
-	 */
-	void exitOp(@NotNull expDecaf2Parser.OpContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#int_literal}.
 	 * @param ctx the parse tree
 	 */
@@ -208,6 +229,16 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitInt_literal(@NotNull expDecaf2Parser.Int_literalContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#mult_Exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterMult_Exp(@NotNull expDecaf2Parser.Mult_ExpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#mult_Exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitMult_Exp(@NotNull expDecaf2Parser.Mult_ExpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#char_literal}.
 	 * @param ctx the parse tree
@@ -229,16 +260,6 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 */
 	void exitStatement(@NotNull expDecaf2Parser.StatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expDecaf2Parser#arith_op}.
-	 * @param ctx the parse tree
-	 */
-	void enterArith_op(@NotNull expDecaf2Parser.Arith_opContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expDecaf2Parser#arith_op}.
-	 * @param ctx the parse tree
-	 */
-	void exitArith_op(@NotNull expDecaf2Parser.Arith_opContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#program}.
 	 * @param ctx the parse tree
 	 */
@@ -249,15 +270,25 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 */
 	void exitProgram(@NotNull expDecaf2Parser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expDecaf2Parser#eq_op}.
+	 * Enter a parse tree produced by {@link expDecaf2Parser#conditionalop}.
 	 * @param ctx the parse tree
 	 */
-	void enterEq_op(@NotNull expDecaf2Parser.Eq_opContext ctx);
+	void enterConditionalop(@NotNull expDecaf2Parser.ConditionalopContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expDecaf2Parser#eq_op}.
+	 * Exit a parse tree produced by {@link expDecaf2Parser#conditionalop}.
 	 * @param ctx the parse tree
 	 */
-	void exitEq_op(@NotNull expDecaf2Parser.Eq_opContext ctx);
+	void exitConditionalop(@NotNull expDecaf2Parser.ConditionalopContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#negate_Exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterNegate_Exp(@NotNull expDecaf2Parser.Negate_ExpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#negate_Exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitNegate_Exp(@NotNull expDecaf2Parser.Negate_ExpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#structDeclaration}.
 	 * @param ctx the parse tree
@@ -268,6 +299,16 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStructDeclaration(@NotNull expDecaf2Parser.StructDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#mulop}.
+	 * @param ctx the parse tree
+	 */
+	void enterMulop(@NotNull expDecaf2Parser.MulopContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#mulop}.
+	 * @param ctx the parse tree
+	 */
+	void exitMulop(@NotNull expDecaf2Parser.MulopContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#literal}.
 	 * @param ctx the parse tree
