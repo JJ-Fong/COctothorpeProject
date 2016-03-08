@@ -12,53 +12,26 @@ import java.util.ArrayList;
  * @author Javier Fong
  */
 public class SymbolTable {
-    ArrayList<symbol> table; 
+    ArrayList<Symbol> table; 
+    ArrayList<Scope> scopes; 
     myNode treeList; 
+    boolean allGood; 
+    String error; 
     
     public SymbolTable(myNode arbolR) { 
         this.treeList = arbolR; 
-        table = new ArrayList<symbol>();
+        table = new ArrayList<Symbol>();
+        scopes = new ArrayList<Scope>();
         ArrayList<myNode> inicial = new ArrayList<myNode>(); 
         inicial.add(treeList); 
-        build(inicial);
+        allGood = true;
+        error = "";
+        
+        Scope global = new Scope("0");
+        scopes.add(global); 
+        build(inicial,scopes.get(0));
     }
     
-    public void build(ArrayList<myNode> list) {
-        for (int i = 0; i < list.size(); i++){
-            myNode nodo = list.get(i);
-            ArrayList<myNode> body = nodo.getAllChildren(); 
-            String nodeText = nodo.getText();
-            nodeText = nodeText.trim();
-            if (nodeText.equals("varDeclaration")) {
-                if (body.size()==3) {
-                    myNode type = body.get(0);
-                    myNode id = body.get(1);
-                    String tipo = getType(type);
-                    
-                    symbol sym = new symbol();
-                    sym.setId(id.getText());
-                    Tipo tp = new Tipo(tipo); 
-                    if (tipo.equals("int")||tipo.equals("char")||tipo.equals("boolean")||tipo.equals("void")){
-                        tp.setSimple(true);
-                    } else {
-                        tp.setStructure(true);
-                    }
-                    sym.setTipo(tp);
-                    boolean flag = add(sym); 
-                } else if (body.size()==6) {
-                    myNode type = body.get(0);
-                    myNode id = body.get(1);
-                    String tipo = getType(type);
-                }
-            }
-            build(body);
-        }
-    }
-    
-    public boolean add(symbol sym) { 
-        boolean flag = true; 
-        return flag; 
-    }
     public String getType(myNode type) {
         String tipo = "";
         ArrayList<myNode> body = type.getAllChildren(); 
@@ -68,5 +41,81 @@ public class SymbolTable {
         }
         return tipo; 
     }
+    
+    public void build(ArrayList<myNode> list,Scope scope) {
+        if (allGood) {
+        for (int i = 0; i < list.size(); i++) {
+            myNode actual = list.get(i);
+            String nodeText = actual.getText();
+            if (nodeText.equals("varDeclaration")) {
+                ArrayList<myNode> body = actual.getAllChildren();
+                myNode typeNode = body.get(0);
+                myNode idNode = body.get(1);
+                
+                String stringType = getType(typeNode);
+                
+                Symbol sym = new Symbol(); 
+                sym.setId(idNode.getText());
+                Type type = new Type(stringType); 
+                if ((stringType.equals("int"))||(stringType.equals("char"))||(stringType.equals("boolean"))||(stringType.equals("void"))){
+                    type.setSimple(true);
+                } else {
+                    type.setStructure(true);
+                }
+                if (body.size()==3) {
+                    sym.setAmbito(scope);
+                    sym.setTipo(type);
+                } else {
+                    myNode sizeNode = body.get(3);
+                    type.setArray(true);
+                    type.setArray_len(Integer.parseInt(sizeNode.getText()));
+                    
+                    sym.setAmbito(scope);
+                    sym.setTipo(type);
+                }
+                allGood = add(sym);
+            }
+            if (nodeText.equals("block")){
+                Scope next_scope = new Scope(String.valueOf(scopes.size()));
+                next_scope.setAnterior(scope);
+                scope.addNext(next_scope);
+                scopes.add(next_scope); 
+                build(actual.getAllChildren(),next_scope);
+            }
+            else if (!nodeText.equals("structDeclaration")) {
+                build(actual.getAllChildren(),scope);
+            }
+        }
+        } else {
+            System.out.println("Error en declaracion de variables");
+        }
+    }
+    
+    public boolean add(Symbol sym) { 
+        boolean flag = false;
+        for (int i=0; i < table.size(); i++){
+            Symbol actual = table.get(i);
+            flag = actual.equal(sym);
+            if (flag) {
+                error = actual.getId()+" already exist in this scope";
+            }
+        }
+        if (!flag) table.add(sym);
+        return (!flag);
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public boolean isAllGood() {
+        return allGood;
+    }
+
+    public ArrayList<Symbol> getTable() {
+        return table;
+    }
+    
+    
     
 }

@@ -31,9 +31,13 @@ varDeclaration: varType ID ';' | varType ID '[' NUM ']' ';'  ;
 
 structDeclaration : 'struct' ID '{' (varDeclaration)* '}'  ;
 
-varType: 'int' | 'char' | 'boolean' | 'struct' ID | structDeclaration | 'void'  ;
+varType: 'int' | 'char' | 'boolean' | 'struct' ID | 'void'  ;
 
-methodDeclaration : methodType ID '(' (parameter (',' parameter)*)* ')' block  ;
+methodDeclaration : methodType ID '(' opt_parameter ')' block  ;
+
+opt_parameter : parameter_list | ;
+
+parameter_list : parameter | parameter ',' (parameter_list)*;
 
 methodType : 'int' | 'char' | 'boolean' | 'void' ;
 

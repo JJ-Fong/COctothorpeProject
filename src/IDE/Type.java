@@ -9,7 +9,7 @@ package IDE;
  *
  * @author Javier Fong
  */
-class Tipo {
+class Type {
     private boolean simple;    //true if is simple
     private boolean structure; //true if is structure
     private boolean param;     //true if is param
@@ -18,7 +18,7 @@ class Tipo {
     
     private String type_name;
 
-    public Tipo(String type_name) {
+    public Type(String type_name) {
         this.simple = false;
         this.structure = false;
         this.param = false;
@@ -63,6 +63,15 @@ class Tipo {
         this.array_len = array_len; 
     }
 
+    public int getArray_len() {
+        return array_len;
+    }
+
+    public void setArray_len(int array_len) {
+        this.array_len = array_len;
+    }
+    
+    
     public String getType_name() {
         return type_name;
     }

@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -22,8 +23,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.table.DefaultTableModel;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -48,7 +51,7 @@ public class mainView extends javax.swing.JFrame {
     JMenuItem run;
     
     //Paneles
-    public JScrollPane sintaxTree, graphicTree, errors, symbolTable, methodTable, structTable;   
+    public JScrollPane sintaxTree, graphicTree, errors, symbolTable, methodTable, structTable, catalogoTipos;   
     public codePane code;
     //Programa
     String programText; 
@@ -119,11 +122,14 @@ public class mainView extends javax.swing.JFrame {
         symbolTable = new JScrollPane(); 
         methodTable = new JScrollPane(); 
         structTable = new JScrollPane(); 
+        catalogoTipos = new JScrollPane(); 
         
         inferior.addTab("Errores", errors);
+        inferior.addTab("Catalogo de Tipos", catalogoTipos);
         inferior.addTab("Tabla de Simbolos", symbolTable);
         inferior.addTab("Tabla de Metodos", methodTable);
         inferior.addTab("Tabla de Estructuras", structTable);
+       
         
         lateral.addTab("Arbol Sintactico", sintaxTree);
         lateral.addTab("Arbol Grafico", graphicTree);
@@ -241,7 +247,7 @@ public class mainView extends javax.swing.JFrame {
         String mstk = "";
         mstk = del.getErrores();
         JTextArea errores = new JTextArea();
-        errores.setEnabled(false);
+        errores.setEditable(false);
         if (mstk.equals("")) { 
             mstk = "Program Parceable";
             errores.setText(mstk);
@@ -261,7 +267,10 @@ public class mainView extends javax.swing.JFrame {
         
             ptl = new ParseToList(arbolGen,parser); 
             myNode list = ptl.getList();
-            SymbolTable st = new SymbolTable(list); 
+            
+            SymbolTable st = new SymbolTable(list);
+            showSymbolTable(st); 
+            System.out.println(st.toString());
         } else {
             errores.setText(mstk);
             sintaxTree.setViewportView(errores);
@@ -270,12 +279,30 @@ public class mainView extends javax.swing.JFrame {
         
         }
         
-
-        
-        
     }
     
-
+    public void showSymbolTable(SymbolTable st) { 
+        if (st.isAllGood()) { 
+            JTable tabla = new JTable();
+            ArrayList<Symbol> lista = st.getTable();
+            String[] title = new String[] {"Id","Ambito","Tipo"}; 
+            Object[][] data = new Object[lista.size()][3]; 
+            for (int i = 0; i < lista.size(); i++ ){
+                Symbol temp = lista.get(i);
+                data[i][0]= temp.getId();
+                data[i][1]= temp.getAmbito().getName();
+                data[i][2]= temp.getTipo().getType_name();
+            }
+            DefaultTableModel model = new DefaultTableModel(data,title); 
+            symbolTable.setViewportView(tabla);
+            tabla.setModel(model);
+        } else {
+            JTextArea noST = new JTextArea(); 
+            noST.setText(st.getError());
+            noST.setEditable(false);
+            symbolTable.setViewportView(noST);
+        }
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

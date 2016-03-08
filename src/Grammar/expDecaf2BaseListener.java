@@ -101,6 +101,18 @@ public class expDecaf2BaseListener implements expDecaf2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterOpt_parameter(@NotNull expDecaf2Parser.Opt_parameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOpt_parameter(@NotNull expDecaf2Parser.Opt_parameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBlock(@NotNull expDecaf2Parser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -144,6 +156,18 @@ public class expDecaf2BaseListener implements expDecaf2Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRel_Exp(@NotNull expDecaf2Parser.Rel_ExpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatement_abierto(@NotNull expDecaf2Parser.Statement_abiertoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatement_abierto(@NotNull expDecaf2Parser.Statement_abiertoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -228,6 +252,18 @@ public class expDecaf2BaseListener implements expDecaf2Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpressionA(@NotNull expDecaf2Parser.ExpressionAContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatement_cerrado(@NotNull expDecaf2Parser.Statement_cerradoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatement_cerrado(@NotNull expDecaf2Parser.Statement_cerradoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -365,18 +401,6 @@ public class expDecaf2BaseListener implements expDecaf2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStructDeclaration(@NotNull expDecaf2Parser.StructDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStructDeclaration(@NotNull expDecaf2Parser.StructDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterMulop(@NotNull expDecaf2Parser.MulopContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -389,6 +413,18 @@ public class expDecaf2BaseListener implements expDecaf2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStructDeclaration(@NotNull expDecaf2Parser.StructDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStructDeclaration(@NotNull expDecaf2Parser.StructDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLiteral(@NotNull expDecaf2Parser.LiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -396,6 +432,18 @@ public class expDecaf2BaseListener implements expDecaf2Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLiteral(@NotNull expDecaf2Parser.LiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParameter_list(@NotNull expDecaf2Parser.Parameter_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParameter_list(@NotNull expDecaf2Parser.Parameter_listContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
