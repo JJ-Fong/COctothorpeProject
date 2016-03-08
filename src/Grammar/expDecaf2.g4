@@ -21,7 +21,9 @@ CHAR: (LETTER|DIGIT|' '| '!' | '"' | '#' | '$' | '%' | '&' | '\'' | '(' | ')' | 
 
 // ********** PARSER *****************
 
-program : 'class' 'Program' '{' (declaration)* '}'  ;
+program : 'class' 'Program' '{' multiple_declaration '}'  ;
+
+multiple_declaration : (declaration)*;
 
 declaration: structDeclaration| varDeclaration | methodDeclaration  ;
 
@@ -41,13 +43,19 @@ parameterType: 'int' | 'char' | 'boolean'  ;
 
 block : '{' (varDeclaration)* (statement)* '}' ;
 
-statement : 'if' '(' expression ')' block ( 'else' block )? 
-           | 'while' '(' expression ')' block
-           |'return' expressionA ';' 
-           | methodCall ';' 
-           | block  
-           | location '=' expression 
-           | (expression)? ';'  ;
+statement: statement_cerrado | statement_abierto ; 
+
+statement_cerrado: 'if' '(' expression ')' statement_cerrado 'else' statement_cerrado
+                    | 'while' '(' expression ')' block
+                    |'return' expressionA ';' 
+                    | methodCall ';' 
+                    | block  
+                    | location '=' expression 
+                    | (expression)? ';'  ;
+ 
+statement_abierto: 'if' '(' expression ')' statement 
+                    | 'if' '(' expression ')' statement_cerrado 'else' statement_abierto ;
+       
 
 expressionA: expression | ;
 
