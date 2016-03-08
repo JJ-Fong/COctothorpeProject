@@ -26,4 +26,12 @@ public class DescriptiveErrorListener extends BaseErrorListener {
         errores += error+"\n";
         System.err.println(error);
     }
+    
+    public String getErrores() {
+        return errores; 
+    }
+    
+    public void setErrores(String error){
+        errores = error; 
+    }
 }

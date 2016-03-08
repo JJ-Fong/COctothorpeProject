@@ -1,5 +1,6 @@
 // Generated from C:\Users\Javier Fong\Documents\Universidad\2016\Ciclo 1\Clases\Compiladores\COctothorpeProject\src\Grammar\expDecaf2.g4 by ANTLR 4.4
 package Grammar;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -52,6 +53,18 @@ public class expDecaf2BaseListener implements expDecaf2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMethodType(@NotNull expDecaf2Parser.MethodTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -71,18 +84,6 @@ public class expDecaf2BaseListener implements expDecaf2Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLocation(@NotNull expDecaf2Parser.LocationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -311,6 +312,18 @@ public class expDecaf2BaseListener implements expDecaf2Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStatement(@NotNull expDecaf2Parser.StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultiple_declaration(@NotNull expDecaf2Parser.Multiple_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiple_declaration(@NotNull expDecaf2Parser.Multiple_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -1,6 +1,5 @@
 // Generated from C:\Users\Javier Fong\Documents\Universidad\2016\Ciclo 1\Clases\Compiladores\COctothorpeProject\src\Grammar\expDecaf2.g4 by ANTLR 4.4
 package Grammar;
-
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -31,6 +30,12 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArg1(@NotNull expDecaf2Parser.Arg1Context ctx);
 	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#methodCall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#methodType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -42,12 +47,6 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLocation(@NotNull expDecaf2Parser.LocationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link expDecaf2Parser#methodCall}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#relop}.
 	 * @param ctx the parse tree
@@ -162,6 +161,12 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStatement(@NotNull expDecaf2Parser.StatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#multiple_declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiple_declaration(@NotNull expDecaf2Parser.Multiple_declarationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#program}.
 	 * @param ctx the parse tree

@@ -1,6 +1,5 @@
 // Generated from C:\Users\Javier Fong\Documents\Universidad\2016\Ciclo 1\Clases\Compiladores\COctothorpeProject\src\Grammar\expDecaf2.g4 by ANTLR 4.4
 package Grammar;
-
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -40,6 +39,16 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 */
 	void exitArg1(@NotNull expDecaf2Parser.Arg1Context ctx);
 	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#methodCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#methodCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#methodType}.
 	 * @param ctx the parse tree
 	 */
@@ -59,16 +68,6 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLocation(@NotNull expDecaf2Parser.LocationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expDecaf2Parser#methodCall}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expDecaf2Parser#methodCall}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodCall(@NotNull expDecaf2Parser.MethodCallContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#relop}.
 	 * @param ctx the parse tree
@@ -259,6 +258,16 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatement(@NotNull expDecaf2Parser.StatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#multiple_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiple_declaration(@NotNull expDecaf2Parser.Multiple_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#multiple_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiple_declaration(@NotNull expDecaf2Parser.Multiple_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#program}.
 	 * @param ctx the parse tree

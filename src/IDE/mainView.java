@@ -57,6 +57,8 @@ public class mainView extends javax.swing.JFrame {
     JTree arbol; 
     TreeViewer view; 
     
+    ParseToList ptl; 
+    
     public mainView() {
         initializeGUI(); 
     }
@@ -229,34 +231,45 @@ public class mainView extends javax.swing.JFrame {
         expDecaf2Parser parser = new expDecaf2Parser(tokens);
         
         parser.removeErrorListeners();
-        parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
+        
+        DescriptiveErrorListener del = new DescriptiveErrorListener(); 
+        del.setErrores("");
+        parser.addErrorListener(del);
         
         ProgramContext tree = parser.program();
         
         String mstk = "";
-        mstk = DescriptiveErrorListener.errores;
+        mstk = del.getErrores();
         JTextArea errores = new JTextArea();
         errores.setEnabled(false);
-        errors.setViewportView(errores); 
         if (mstk.equals("")) { 
             mstk = "Program Parceable";
+            errores.setText(mstk);
+        
             view = new TreeViewer(Arrays.asList(
-                parser.getRuleNames()),tree);
-                view.setScale(1.5);
-                ParseTree hijo = tree.getChild(0);
-                ParseTree arbolGen = hijo.getParent();
+            parser.getRuleNames()),tree);
+            view.setScale(1.5);
+            ParseTree hijo = tree.getChild(0);
+            ParseTree arbolGen = hijo.getParent();
 
-                TreeBuilder tb = new TreeBuilder(); 
-                arbol = tb.crearArbol(arbolGen, parser); 
+            TreeBuilder tb = new TreeBuilder(); 
+            arbol = tb.crearArbol(arbolGen, parser); 
 
-                sintaxTree.setViewportView(arbol);
-                graphicTree.setViewportView(view);
+            sintaxTree.setViewportView(arbol);
+            graphicTree.setViewportView(view);
+            errors.setViewportView(errores); 
+        
+            ptl = new ParseToList(arbolGen,parser); 
+            myNode list = ptl.getList();
+            SymbolTable st = new SymbolTable(list); 
         } else {
+            errores.setText(mstk);
             sintaxTree.setViewportView(errores);
             graphicTree.setViewportView(errores);
-            
+            errors.setViewportView(errores); 
+        
         }
-        errores.setText(mstk);
+        
 
         
         
