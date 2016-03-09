@@ -13,13 +13,12 @@ import java.util.ArrayList;
  */
 public class Struct {
     String id; 
-    Scope ambito; 
-    ArrayList<Symbol> cuerpo;
-
+    Scope scope; 
+    Scope innerScope; 
     public Struct() {
         this.id = "";
-        this.ambito = null;
-        cuerpo = new ArrayList<>(); 
+        this.scope = null;
+        this.innerScope = null;  
     }
 
     public String getId() {
@@ -30,21 +29,34 @@ public class Struct {
         this.id = id;
     }
 
-    public Scope getAmbito() {
-        return ambito;
+    public Scope getScope() {
+        return scope;
     }
 
-    public void setAmbito(Scope ambito) {
-        this.ambito = ambito;
+    public void setScope(Scope ambito) {
+        this.scope = ambito;
     }
 
-    public ArrayList<Symbol> getCuerpo() {
-        return cuerpo;
+    public Scope getInnerScope() {
+        return innerScope;
     }
 
-    public void setCuerpo(ArrayList<Symbol> cuerpo) {
-        this.cuerpo = cuerpo;
+    public void setInnerScope(Scope innerScope) {
+        this.innerScope = innerScope;
     }
     
+    public boolean equal(Struct other){
+        boolean flag = false; 
+        
+        String id1 = this.getId();
+        String id2 = other.getId();
+        String scope1 = this.getScope().getName();
+        String scope2 = other.getScope().getName();
+        
+        if (id1.equals(id2) && scope1.equals(scope2)){
+            flag = true; 
+        }
+        return flag; 
+    }
     
 }

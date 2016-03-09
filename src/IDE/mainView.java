@@ -51,12 +51,12 @@ public class mainView extends javax.swing.JFrame {
     JMenuItem run;
     
     //Paneles
-    public JScrollPane sintaxTree, graphicTree, errors, symbolTable, methodTable, structTable, catalogoTipos;   
+    public JScrollPane sintaxTree, graphicTree, errors, symbolTable, methodTable, structTable;   
     public codePane code;
     //Programa
     String programText; 
     String filePath; 
-    
+    tableBuilder tableB;
     JTree arbol; 
     TreeViewer view; 
     
@@ -122,10 +122,8 @@ public class mainView extends javax.swing.JFrame {
         symbolTable = new JScrollPane(); 
         methodTable = new JScrollPane(); 
         structTable = new JScrollPane(); 
-        catalogoTipos = new JScrollPane(); 
         
-        inferior.addTab("Errores", errors);
-        inferior.addTab("Catalogo de Tipos", catalogoTipos);
+        inferior.addTab("Output", errors);
         inferior.addTab("Tabla de Simbolos", symbolTable);
         inferior.addTab("Tabla de Metodos", methodTable);
         inferior.addTab("Tabla de Estructuras", structTable);
@@ -268,39 +266,107 @@ public class mainView extends javax.swing.JFrame {
             ptl = new ParseToList(arbolGen,parser); 
             myNode list = ptl.getList();
             
-            SymbolTable st = new SymbolTable(list);
-            showSymbolTable(st); 
-            System.out.println(st.toString());
+            tableB = new tableBuilder(list);
+            System.out.println("BUILD"); 
+            showSymbolTable(tableB.symbolTable); 
+            showStructTable(tableB.structTable);
+            showMethodTable(tableB.methodTable,tableB.parameterList);
+            //System.out.println(st.toString());
         } else {
             errores.setText(mstk);
             sintaxTree.setViewportView(errores);
             graphicTree.setViewportView(errores);
+            symbolTable.setViewportView(errores);
+            structTable.setViewportView(errores);
+            methodTable.setViewportView(errores);
+            
             errors.setViewportView(errores); 
         
         }
         
     }
     
-    public void showSymbolTable(SymbolTable st) { 
-        if (st.isAllGood()) { 
+    public void showSymbolTable(ArrayList<Symbol> st) { 
+        if (tableB.isAllGood()) { 
             JTable tabla = new JTable();
-            ArrayList<Symbol> lista = st.getTable();
-            String[] title = new String[] {"Id","Ambito","Tipo"}; 
-            Object[][] data = new Object[lista.size()][3]; 
+            ArrayList<Symbol> lista = st;
+            String[] title = new String[] {"Id","Ambito","Tipo","isArray","Size","isParam"}; 
+            Object[][] data = new Object[lista.size()][6]; 
             for (int i = 0; i < lista.size(); i++ ){
                 Symbol temp = lista.get(i);
                 data[i][0]= temp.getId();
-                data[i][1]= temp.getAmbito().getName();
+                data[i][1]= temp.getScope().getName();
                 data[i][2]= temp.getTipo().getType_name();
+                data[i][3] = temp.getTipo().isArray();
+                data[i][4] = temp.getTipo().getArray_len();
+                data[i][5]=temp.getTipo().isParam(); 
             }
             DefaultTableModel model = new DefaultTableModel(data,title); 
             symbolTable.setViewportView(tabla);
             tabla.setModel(model);
         } else {
             JTextArea noST = new JTextArea(); 
-            noST.setText(st.getError());
+            noST.setText(tableB.getErrors());
             noST.setEditable(false);
             symbolTable.setViewportView(noST);
+            errors.setViewportView(noST);
+        }
+    }
+    
+    public void showStructTable(ArrayList<Struct> lista){
+        if (tableB.isAllGood()) { 
+            JTable tabla = new JTable();
+            String[] title = new String[] {"Id","Ambito Declaracion","Ambito Interior"}; 
+            Object[][] data = new Object[lista.size()][3]; 
+            for (int i = 0; i < lista.size(); i++ ){
+                Struct temp = lista.get(i);
+                data[i][0]= temp.getId();
+                data[i][1]= temp.getScope().getName();
+                data[i][2]= temp.getInnerScope().getName();
+            }
+            DefaultTableModel model = new DefaultTableModel(data,title); 
+            structTable.setViewportView(tabla);
+            tabla.setModel(model);
+        } else {
+            JTextArea noST = new JTextArea(); 
+            noST.setText(tableB.getErrors());
+            noST.setEditable(false);
+            structTable.setViewportView(noST);
+            errors.setViewportView(noST);
+        }
+    }
+    
+    public void showMethodTable(ArrayList<Method> lista,ArrayList<ArrayList<Symbol>> params) {
+        if (tableB.isAllGood()) { 
+            JTable tabla = new JTable();
+            String[] title = new String[] {"Id","Ambito Declaracion","Ambito Interior","Parametros"}; 
+            Object[][] data = new Object[lista.size()][4]; 
+            for (int i = 0; i < lista.size(); i++ ){
+                Method temp = lista.get(i);
+                ArrayList<Symbol> thisParams = params.get(Integer.parseInt(temp.getInnerScope().getName()));
+                String paramsList = ""; 
+                for (int j = 0 ; j < thisParams.size(); j++) {
+                    if (paramsList.length()==0) paramsList = "Params: ";
+                    Symbol sym = thisParams.get(j); 
+                    paramsList = paramsList.concat(sym.getTipo().getType_name()+" "+sym.getId()+" , ");
+                }
+                if (paramsList.length()>0) {
+                    paramsList = paramsList.substring(0,paramsList.length()- 3);
+                }
+                data[i][0]= temp.getId();
+                data[i][1]= temp.getScope().getName();
+                data[i][2]= temp.getInnerScope().getName();
+                data[i][3]= paramsList; 
+            }
+            DefaultTableModel model = new DefaultTableModel(data,title); 
+            methodTable.setViewportView(tabla);
+            tabla.setModel(model);
+        } else {
+            JTextArea noST = new JTextArea(); 
+            noST.setText(tableB.getErrors());
+            noST.setEditable(false);
+            methodTable.setViewportView(noST);
+            errors.setViewportView(noST);
         }
     }
     public static void main(String args[]) {

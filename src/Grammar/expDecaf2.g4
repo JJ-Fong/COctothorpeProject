@@ -31,7 +31,7 @@ varDeclaration: varType ID ';' | varType ID '[' NUM ']' ';'  ;
 
 structDeclaration : 'struct' ID '{' (varDeclaration)* '}'  ;
 
-varType: 'int' | 'char' | 'boolean' | 'struct' ID | 'void'  ;
+varType: structDeclaration | 'int' | 'char' | 'boolean' | 'struct' ID | 'void' ;
 
 methodDeclaration : methodType ID '(' opt_parameter ')' block  ;
 

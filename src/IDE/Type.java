@@ -15,14 +15,14 @@ class Type {
     private boolean param;     //true if is param
     private boolean array;     //true if is an array
     private int array_len;
-    
     private String type_name;
-
+    
     public Type(String type_name) {
         this.simple = false;
         this.structure = false;
         this.param = false;
         this.array = false;
+        this.array_len = 0; 
         this.type_name = type_name;
     }
 
