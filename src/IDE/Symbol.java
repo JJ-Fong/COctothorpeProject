@@ -9,12 +9,12 @@ package IDE;
  *
  * @author Javier Fong
  */
-public class symbol {
+public class Symbol {
     String id;
-    Ambito ambito; 
-    Tipo tipo; 
+    Scope scope; 
+    Type tipo; 
     
-    public symbol() {
+    public Symbol() {
         id = "";
     }
 
@@ -26,14 +26,37 @@ public class symbol {
         this.id = id;
     }
 
-    public Tipo getTipo() {
+    public Type getTipo() {
         return tipo;
     }
 
-    public void setTipo(Tipo tipo) {
+    public void setTipo(Type tipo) {
         this.tipo = tipo;
     }
+
+    public Scope getScope() {
+        return scope;
+    }
+
+    public void setScope(Scope ambito) {
+        this.scope = scope;
+    }
     
+    public boolean equal(Symbol other){
+        boolean flag = true; 
+        String id1 = this.getId(); 
+        String id2 = other.getId();
+        
+        String ambito1 = this.getScope().getName();
+        String ambito2 = other.getScope().getName();
+        
+        if (id1.equals(id2)&&ambito1.equals(ambito2)) {
+            flag = true; 
+        } else {
+            flag = false; 
+        }
+        return flag; 
+    }
     
     
 }
