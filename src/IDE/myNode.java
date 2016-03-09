@@ -12,16 +12,20 @@ import java.util.ArrayList;
  * @author Javier Fong
  */
 public class myNode {
+    String type;
     String text; 
     ArrayList<myNode> children; 
     
     public myNode() {
+        type = "";
         text = "";
         children = new ArrayList<myNode>(); 
     }
     
     public myNode(String txt){
-        text = txt; 
+        type = "void";
+        text = txt;
+        children = new ArrayList<myNode>(); 
     }
     
     public void addChild(myNode son){
@@ -49,4 +53,14 @@ public class myNode {
     public String getText() { 
         return text; 
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    
 }

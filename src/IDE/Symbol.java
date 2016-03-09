@@ -39,7 +39,7 @@ public class Symbol {
     }
 
     public void setScope(Scope ambito) {
-        this.scope = scope;
+        this.scope = ambito;
     }
     
     public boolean equal(Symbol other){

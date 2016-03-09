@@ -54,7 +54,7 @@ statement_cerrado: 'if' '(' expression ')' statement_cerrado 'else' statement_ce
                     |'return' expressionA ';' 
                     | methodCall ';' 
                     | block  
-                    | location '=' expression 
+                    | location '=' expression
                     | (expression)? ';'  ;
  
 statement_abierto: 'if' '(' expression ')' statement 
@@ -66,19 +66,23 @@ expressionA: expression | ;
 
 location : (ID|ID '[' expression ']') ('.' location)?  ;
 
-expression : rel_Exp conditionalop expression | rel_Exp;
+expression :  rel_Exp | rel_Exp conditionalop expression ;
 
-rel_Exp : add_Exp relop rel_Exp | add_Exp; 
+rel_Exp :  eq_Exp | eq_Exp relop rel_Exp ; 
 
-add_Exp : mult_Exp addop add_Exp  |  mult_Exp; 
+eq_Exp : add_Exp | add_Exp eqop eq_Exp; 
+z
+add_Exp :  mult_Exp| mult_Exp addop add_Exp   ; 
 
-mult_Exp : negate_Exp mulop mult_Exp | negate_Exp; 
+mult_Exp : negate_Exp | negate_Exp mulop mult_Exp  ; 
 
-negate_Exp : '-' value  | '!'  value  |  value;
+negate_Exp : value | '!'  value  | '-' value   ;
 
 conditionalop : '&&' | '||';
 
-relop : '<=' | '<' | '>' | '>=' | '==' | '!=';
+relop : '<=' | '<' | '>' | '>=' ;
+
+eqop : '==' | '!=';
 
 addop : '+' | '-';
 

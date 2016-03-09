@@ -16,16 +16,20 @@ public class Scope {
     Scope anterior; 
     ArrayList<Scope> siguientes; 
     
+    boolean checked; 
+    
     public Scope(String name) {
         this.name = name; 
         anterior = null;
-        siguientes = new ArrayList(); 
+        siguientes = new ArrayList();
+        checked = false;
     }
     
     public Scope(Scope ant, String name){
         this.name = name; 
         anterior = ant; 
-        siguientes = new ArrayList(); 
+        siguientes = new ArrayList();
+        checked = false;
     }
 
     public String getName() {
@@ -45,6 +49,27 @@ public class Scope {
         return (siguientes.get(index));
     }
 
+    public ArrayList<Scope> getSiguientes() {
+        return siguientes;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked() {
+        if (siguientes.size() == 0) {
+            this.checked = true; 
+        } else {
+            boolean allChecked = true; 
+            for (int i = 0; i < siguientes.size(); i++) {
+                Scope actual = siguientes.get(i);
+                allChecked = (allChecked  && actual.isChecked()); 
+            }
+            this.checked = allChecked; 
+        }
+    }
+    
     public Scope getAnterior() {
         return anterior;
     }
