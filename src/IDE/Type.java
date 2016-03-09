@@ -22,7 +22,7 @@ class Type {
         this.structure = false;
         this.param = false;
         this.array = false;
-        this.array_len = 0; 
+        this.array_len = 0;
         this.type_name = type_name;
     }
 
