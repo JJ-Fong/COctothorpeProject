@@ -450,11 +450,109 @@ public class typeSetter {
     }
     
     private myNode typeNegExp(myNode nodo) {
-        
-        
+        myNode indicador = nodo.getChild(0); 
+        if (indicador.getText().equals("value")) {
+            myNode value = indicador; 
+            value = typeValue(value); 
+            nodo.setType(value.getType()); 
+        } else if (indicador.getText().equals("!")) {
+            myNode value = nodo.getChild(1); 
+            value = typeValue(value); 
+            if (value.getType().equals("boolean")) { 
+                nodo.setType("boolean"); 
+            } else { 
+                error = "boolean value needed for '!' expression"; 
+                nodo.setType("typer_error");
+            }
+        } else if (indicador.getText().equals("-")) {
+            myNode value = nodo.getChild(1); 
+            value = typeValue(value); 
+            if (value.getType().equals("int")) { 
+                nodo.setType("int"); 
+            } else { 
+                error = "int value needed for '-' expression"; 
+                nodo.setType("type_error");
+            } 
+        }
         return nodo; 
     }
     
+    private myNode typeValue(myNode nodo) { 
+        myNode indicador = nodo.getChild(0); 
+        String nodeText = indicador.getText(); 
+        if (nodeText.equals("literal")) {
+            myNode literal = indicador;
+            
+            literal = typeLiteral(literal); 
+            
+            nodo.setType(literal.getType());
+        } else if (nodeText.equals("(")) {
+            myNode expression = nodo.getChild(1);
+            
+            expression = typeExpression(expression); 
+            
+            nodo.setType(expression.getType());
+        } else if (nodeText.equals("methodCall")) {
+            myNode methodCall = indicador; 
+            
+            methodCall = typeMethodCall(methodCall); 
+            
+            nodo.setType(methodCall.getType());
+        } else if (nodeText.equals("location")) {
+            myNode location = indicador;
+            
+            location = typeLocation(location); 
+            
+            nodo.setType(location.getType());
+        }
+        return nodo; 
+    }
+    
+    private myNode typeLiteral(myNode nodo) {
+        myNode literal = nodo.getChild(0); 
+        if (literal.getText().equals("int_literal")) {
+            nodo.setType("int");
+        } else if (literal.getText().equals("char_literal")) {
+            nodo.setType("char");
+        } else if (literal.getText().equals("bool_literal")) {
+            nodo.setType("boolean");
+        } 
+        return nodo; 
+    }
+    
+    private myNode typeMethodCall(myNode nodo) {
+        myNode idNode = nodo.getChild(0); 
+        myNode args = nodo.getChild(2); 
+        
+        Method method = getMethod(idNode.getText());
+        if (method == null) {
+            error = idNode.getText() + " is not a Method"; 
+            nodo.setType("typer_error");
+        } else { 
+            ArrayList<Symbol> params = parameterList.get(Integer.parseInt(method.getInnerScope().getName()));
+            ArrayList<Symbol> paramsDecl = listArgs(args); 
+            String paramsString = getFirma(params); 
+            String paramsDeclString = getFirma(paramsDecl); 
+            if (paramsString.equals(paramsDeclString)){
+                
+            }      
+        }
+        return nodo;
+    }
+    
+    private ArrayList<Symbol> listArgs(myNode nodo) {
+        ArrayList<Symbol> lista = new ArrayList<>(); 
+        return lista;
+    }
+    
+    private String getFirma(ArrayList<Symbol> params) { 
+        String list = ""; 
+        for (int i = 0; i < params.size(); i++ ) {
+            Symbol temp = params.get(i); 
+            list.concat(temp.getTipo().getType_name()+"-");
+        }
+        return list; 
+    }
     private Scope nextUnchecked(Scope scope) {
         boolean found = false;
         int i = 0;
