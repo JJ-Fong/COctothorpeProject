@@ -51,12 +51,13 @@ public class mainView extends javax.swing.JFrame {
     JMenuItem run;
     
     //Paneles
-    public JScrollPane sintaxTree, graphicTree, errors, symbolTable, methodTable, structTable;   
+    public JScrollPane sintaxTree, graphicTree, errors, symbolTable, methodTable, structTable, typeErrors;   
     public codePane code;
     //Programa
     String programText; 
     String filePath; 
     tableBuilder tableB;
+    typeSetter typeS; 
     JTree arbol; 
     TreeViewer view; 
     
@@ -122,12 +123,14 @@ public class mainView extends javax.swing.JFrame {
         symbolTable = new JScrollPane(); 
         methodTable = new JScrollPane(); 
         structTable = new JScrollPane(); 
+        typeErrors = new JScrollPane(); 
         
         inferior.addTab("Output", errors);
+        inferior.addTab("Semanticos",typeErrors);
         inferior.addTab("Tabla de Simbolos", symbolTable);
-        inferior.addTab("Tabla de Metodos", methodTable);
         inferior.addTab("Tabla de Estructuras", structTable);
-       
+        inferior.addTab("Tabla de Metodos", methodTable);
+        
         
         lateral.addTab("Arbol Sintactico", sintaxTree);
         lateral.addTab("Arbol Grafico", graphicTree);
@@ -249,7 +252,6 @@ public class mainView extends javax.swing.JFrame {
         if (mstk.equals("")) { 
             mstk = "Program Parceable";
             errores.setText(mstk);
-        
             view = new TreeViewer(Arrays.asList(
             parser.getRuleNames()),tree);
             view.setScale(1.5);
@@ -266,11 +268,17 @@ public class mainView extends javax.swing.JFrame {
             ptl = new ParseToList(arbolGen,parser); 
             myNode list = ptl.getList();
             
-            tableB = new tableBuilder(list);
-            System.out.println("BUILD"); 
-            showSymbolTable(tableB.symbolTable); 
-            showStructTable(tableB.structTable);
-            showMethodTable(tableB.methodTable,tableB.parameterList);
+            sistemaTipos st = new sistemaTipos(list); 
+            
+            showSymbolTable(st.getSymbolTable());
+            showStructTable(st.getStructTable());
+            showMethodTable(st.getMethodTable(),st.getParamsList());
+            
+            JTextArea semantica = new JTextArea(); 
+            semantica.setText(st.getError() + "\n\n\nEste programa es "+st.getTree().getType()); 
+            typeErrors.setViewportView(semantica);
+            
+            
             //System.out.println(st.toString());
         } else {
             errores.setText(mstk);
@@ -287,19 +295,21 @@ public class mainView extends javax.swing.JFrame {
     }
     
     public void showSymbolTable(ArrayList<Symbol> st) { 
-        if (tableB.isAllGood()) { 
+        if (true) { 
             JTable tabla = new JTable();
             ArrayList<Symbol> lista = st;
-            String[] title = new String[] {"Id","Ambito","Tipo","isArray","Size","isParam"}; 
-            Object[][] data = new Object[lista.size()][6]; 
+            String[] title = new String[] {"Id","Ambito","Tipo","isStruct","isArray","ArraySize","isParam"}; 
+                    
+            Object[][] data = new Object[lista.size()][7]; 
             for (int i = 0; i < lista.size(); i++ ){
                 Symbol temp = lista.get(i);
                 data[i][0]= temp.getId();
                 data[i][1]= temp.getScope().getName();
                 data[i][2]= temp.getTipo().getType_name();
-                data[i][3] = temp.getTipo().isArray();
-                data[i][4] = temp.getTipo().getArray_len();
-                data[i][5]=temp.getTipo().isParam(); 
+                data[i][3] = temp.getTipo().isStructure();
+                data[i][4] = temp.getTipo().isArray();
+                data[i][5] = temp.getTipo().getArray_len();
+                data[i][6]=temp.getTipo().isParam(); 
             }
             DefaultTableModel model = new DefaultTableModel(data,title); 
             symbolTable.setViewportView(tabla);
@@ -314,7 +324,7 @@ public class mainView extends javax.swing.JFrame {
     }
     
     public void showStructTable(ArrayList<Struct> lista){
-        if (tableB.isAllGood()) { 
+        if (true) { 
             JTable tabla = new JTable();
             String[] title = new String[] {"Id","Ambito Declaracion","Ambito Interior"}; 
             Object[][] data = new Object[lista.size()][3]; 
@@ -337,7 +347,7 @@ public class mainView extends javax.swing.JFrame {
     }
     
     public void showMethodTable(ArrayList<Method> lista,ArrayList<ArrayList<Symbol>> params) {
-        if (tableB.isAllGood()) { 
+        if (true) { 
             JTable tabla = new JTable();
             String[] title = new String[] {"Id","Ambito Declaracion","Ambito Interior","Parametros"}; 
             Object[][] data = new Object[lista.size()][4]; 

@@ -27,8 +27,11 @@ public class typeSetter {
         this.structTable = tableB.getStructTable();
         this.symbolTable = tableB.getSymbolTable();
         this.methodTable = tableB.getMethodTable();
+        this.parameterList = tableB.parameterList;
         this.scopes = tableB.getScopes(); 
         this.error = ""; 
+        
+        actual = scopes.get(0);
         tree = typeProgram(tree); 
     }
     
@@ -43,7 +46,7 @@ public class typeSetter {
         ArrayList<myNode> children = mulDecl.getAllChildren();
         boolean isVoid = true; 
         for (int i = 0; i < children.size(); i++) {
-            myNode child = children.get(i);
+            myNode child = children.get(i).getChild(0);
             if (child.getText().equals("structDeclaration")) child = typeStructDeclaration(child);
             else if (child.getText().equals("varDeclaration")) child = typeVarDeclaration(child);
             else if (child.getText().equals("methodDeclaration")) child = typeMethodDeclaration(child);
@@ -68,8 +71,8 @@ public class typeSetter {
     }
     
     private myNode typeMethodDeclaration(myNode nodo) {
-        myNode id = nodo.getChild(2);
-        myNode block = nodo.getChild(4);
+        myNode id = nodo.getChild(1);
+        myNode block = nodo.getChild(5);
         actual = nextUnchecked(actual);
         block = typeBlock(block);
         actual.setChecked();
@@ -157,7 +160,7 @@ public class typeSetter {
             actual = actual.getAnterior();
             nodo.setType(block.getType());
         } else if (indicador.getText().equals("location")) {
-            myNode location = indicador; 
+            myNode location = nodo.getChild(0); 
             myNode expression = nodo.getChild(2); 
             
             location = typeLocation(location);
@@ -166,7 +169,7 @@ public class typeSetter {
             if (location.getType().equals(expression.getType())) {
                 nodo.setType("void");
             } else {
-                error = expression.getType()+" cannot be stored in a "+location.getType()+"\n"; 
+                error = error + expression.getType()+" cannot be stored in  "+location.getText()+"\n"; 
             }
         } else if (indicador.getText().equals("expressionA")){
             myNode expression = nodo.getChild(2); 
@@ -534,14 +537,34 @@ public class typeSetter {
             String paramsString = getFirma(params); 
             String paramsDeclString = getFirma(paramsDecl); 
             if (paramsString.equals(paramsDeclString)){
-                
-            }      
+                nodo.setType(method.getType().getType_name());
+            } else {
+                error = error + " incorrect signature in "+idNode.getText()+" call"; 
+                nodo.setType("type_error"); 
+            }
         }
         return nodo;
     }
     
     private ArrayList<Symbol> listArgs(myNode nodo) {
-        ArrayList<Symbol> lista = new ArrayList<>(); 
+        ArrayList<Symbol> lista = new ArrayList<>();
+        ArrayList<myNode> body = nodo.getAllChildren(); 
+        myNode arg = body.get(0); 
+        if (arg.getText().equals("arg2")) {
+            lista = listArgs(arg); 
+        } else if (arg.getText().equals("arg")) {
+            for (int i = 0; i < body.size(); i++) { 
+                arg = body.get(i);
+                if (arg.getText().equals("arg")) {
+                    myNode expression = arg.getChild(0);
+                    expression = typeExpression(expression);
+                    Type type = new Type(expression.getType()); 
+                    Symbol symbol = new Symbol(); 
+                    symbol.setTipo(type);
+                    lista.add(symbol);
+                }
+            }
+        } 
         return lista;
     }
     
@@ -549,7 +572,7 @@ public class typeSetter {
         String list = ""; 
         for (int i = 0; i < params.size(); i++ ) {
             Symbol temp = params.get(i); 
-            list.concat(temp.getTipo().getType_name()+"-");
+            list = list.concat(temp.getTipo().getType_name()+"-");
         }
         return list; 
     }
@@ -568,42 +591,68 @@ public class typeSetter {
     private Method getMethod(String id) {
         boolean found = false;
         int i = 0;
-        Method proto = new Method();
-        proto.setId(id);
-        proto.setScope(actual);
         Method method = null; 
         while ((i < methodTable.size())&&(!found)){
             method = methodTable.get(i);
-            found = (method.equal(proto)); 
+            ArrayList alcance = getAlcance(method.getScope()); 
+            String actualName = actual.getName(); 
+            if (method.getId().equals(id)&& alcance.contains(actualName)) { 
+                found = true; 
+            }
+            i++;
         }
+        if (!found) method = null;
         return method;
     }
     
     private Struct getStruct(String id) {
         boolean found = false;
         int i = 0;
-        Struct proto = new Struct();
-        proto.setId(id);
-        proto.setScope(actual);
         Struct struct = null; 
-        while ((i < methodTable.size())&&(!found)){
+        while ((i < structTable.size())&&(!found)){
             struct = structTable.get(i);
-            found = (struct.equal(proto)); 
+            ArrayList alcance = getAlcance(struct.getScope()); 
+            String actualName = actual.getName(); 
+            if (struct.getId().equals(id)&& alcance.contains(actualName)) { 
+                found = true; 
+            }
+            i++;
         }
+        if (!found) struct = null;
         return struct;
     }
     
     private Symbol getSymbol(String id) {
         boolean found = false;
         int i = 0;
-        Symbol proto = new Symbol();
-        proto.setId(id);
-        proto.setScope(actual);
         Symbol symbol = null; 
-        while ((i < methodTable.size())&&(!found)){
+        while ((i < symbolTable.size())&&(!found)){
             symbol = symbolTable.get(i);
-            found = (symbol.equal(proto)); 
+            ArrayList alcance = getAlcance(symbol.getScope()); 
+            String actualName = actual.getName(); 
+            if (symbol.getId().equals(id)&& alcance.contains(actualName)) { 
+                found = true; 
+            }
+            i++;
         }
+        if (!found) symbol = null;
         return symbol;
+    }
+    
+    private ArrayList getAlcance(Scope scope) { 
+        ArrayList alcance = new ArrayList();
+        alcance.add(scope.getName()); 
+        for (int i = 0; i < scope.getSiguientes().size(); i++) {
+            alcance = getAlcanceHijos(alcance,scope.getNext(i));
+        }
+        return alcance; 
+    }
+    
+    private ArrayList getAlcanceHijos(ArrayList lista, Scope scope) { 
+        lista.add(scope.getName()); 
+        for (int i = 0; i < scope.getSiguientes().size(); i++) {
+            getAlcanceHijos(lista,scope.getNext(i));
+        }
+        return lista; 
     }
 }

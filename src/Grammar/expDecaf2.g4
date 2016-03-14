@@ -71,8 +71,8 @@ expression :  rel_Exp | rel_Exp conditionalop expression ;
 rel_Exp :  eq_Exp | eq_Exp relop rel_Exp ; 
 
 eq_Exp : add_Exp | add_Exp eqop eq_Exp; 
-z
-add_Exp :  mult_Exp| mult_Exp addop add_Exp   ; 
+
+add_Exp :  mult_Exp| mult_Exp addop add_Exp; 
 
 mult_Exp : negate_Exp | negate_Exp mulop mult_Exp  ; 
 
