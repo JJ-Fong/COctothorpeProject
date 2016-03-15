@@ -209,6 +209,16 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 */
 	void exitExpressionA(@NotNull expDecaf2Parser.ExpressionAContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#eqop}.
+	 * @param ctx the parse tree
+	 */
+	void enterEqop(@NotNull expDecaf2Parser.EqopContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#eqop}.
+	 * @param ctx the parse tree
+	 */
+	void exitEqop(@NotNull expDecaf2Parser.EqopContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#statement_cerrado}.
 	 * @param ctx the parse tree
 	 */
@@ -328,6 +338,16 @@ public interface expDecaf2Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNegate_Exp(@NotNull expDecaf2Parser.Negate_ExpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expDecaf2Parser#eq_Exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterEq_Exp(@NotNull expDecaf2Parser.Eq_ExpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expDecaf2Parser#eq_Exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitEq_Exp(@NotNull expDecaf2Parser.Eq_ExpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expDecaf2Parser#mulop}.
 	 * @param ctx the parse tree

@@ -132,6 +132,12 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpressionA(@NotNull expDecaf2Parser.ExpressionAContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#eqop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEqop(@NotNull expDecaf2Parser.EqopContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#statement_cerrado}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -203,6 +209,12 @@ public interface expDecaf2Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNegate_Exp(@NotNull expDecaf2Parser.Negate_ExpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expDecaf2Parser#eq_Exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEq_Exp(@NotNull expDecaf2Parser.Eq_ExpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expDecaf2Parser#mulop}.
 	 * @param ctx the parse tree

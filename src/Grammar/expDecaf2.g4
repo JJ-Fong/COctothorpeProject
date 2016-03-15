@@ -12,7 +12,7 @@ fragment DIGIT : '0'..'9' ;
 ID : LETTER( LETTER | DIGIT)* ;
 NUM: DIGIT(DIGIT)* ;
 COMMENTS: '//' ~('\r' | '\n' )*  -> channel(HIDDEN);
-WS : [ \t\r\n\f | ' '| '\r' | '\n' | '\t']+  ->channel(HIDDEN); 
+WS : [ \t\r\n\f | ' ' | '\r' | '\n' | '\t']+  ->channel(HIDDEN); 
 
 CHAR: (LETTER|DIGIT|' '| '!' | '"' | '#' | '$' | '%' | '&' | '\'' | '(' | ')' | '*' | '+' 
 | ',' | '-' | '.' | '/' | ':' | ';' | '<' | '=' | '>' | '?' | '@' | '[' | '\\' | ']' | '^' | '_' | '`'| '{' | '|' | '}' | '~' 
@@ -102,6 +102,6 @@ literal : int_literal | char_literal | bool_literal ;
 
 int_literal : NUM ;
 
-char_literal : '\'' CHAR '\'' ;
+char_literal : '\\' CHAR '\\' ;
 
 bool_literal : 'true' | 'false' ;

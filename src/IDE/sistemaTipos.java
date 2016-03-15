@@ -36,6 +36,44 @@ public class sistemaTipos {
         error = ""; 
         scopes.add(actual);
         this.tree = typeProgram(tree); 
+        
+        int i = 0;
+        String errorBM = error; 
+        String typeBM = tree.getType(); 
+        
+        boolean mainFound = false;
+        while (i < methodTable.size() && !mainFound) {
+            Method method = methodTable.get(i);
+            if (method.getId().equals("main")) {
+                Scope scope = method.getInnerScope(); 
+                ArrayList<Symbol> sign = paramsList.get(Integer.parseInt(scope.getName())); 
+                if (sign.size() == 0) {
+                    Method methodMain = searchMethodByID("main"); 
+                    Type mainType = methodMain.getType(); 
+                    if (!mainType.getType_name().equals("void")) {
+                        tree.setType("type_error");
+                        error += "main method must be void" ;
+                    } else {
+                        mainFound = true; 
+                    }
+                } else {
+                    tree.setType("type_error");
+                    error += "main must not have arguments";
+                }
+            } else {
+                tree.setType("type_error");
+                error += "main not found" ;
+            }
+            i++;
+        }
+        if (mainFound) {
+            error = errorBM;
+            tree.setType(typeBM);
+        }
+        if (methodTable.size() == 0) {
+            tree.setType("type_error");
+            error += "main not found" ;
+        }
     }
     
     private myNode typeProgram(myNode nodo) { 
@@ -200,6 +238,7 @@ public class sistemaTipos {
         } else if (statement.getText().equals("statement_abierto")) {
             statement = typeStatementAbierto(statement);
         } 
+        nodo.setType(statement.getType());
         return nodo; 
     }
     
@@ -229,7 +268,7 @@ public class sistemaTipos {
             myNode block = nodo.getChild(4);
              
             expression = typeExpression(expression);
-            block = typeExpression(block);
+            block = typeBlock(block);
             
             if (expression.getType().equals("boolean") && block.getType().equals("void")) {
                 nodo.setType("void");
@@ -273,7 +312,7 @@ public class sistemaTipos {
                 nodo.setType("void");
             } else {
                 nodo.setType("type_error");
-                error += expression.getType()+" cannot be store in "+location.getType()+" variable";
+                error += expression.getType()+" cannot be store in "+location.getType()+" variable\n";
             }
         }else if (nodeText.equals("expression")) {
             firstNode = typeExpression(firstNode); 
@@ -336,6 +375,7 @@ public class sistemaTipos {
         }
         return nodo; 
     }
+    
     private myNode typeExpression(myNode nodo) {
         if (nodo.getAllChildren().size() == 1) {
             myNode relExp = nodo.getChild(0);
@@ -351,8 +391,9 @@ public class sistemaTipos {
             expression = typeExpression(expression); 
             
             if (relExp.getType().equals("boolean") && expression.getType().equals("boolean")) {
-                nodo.setType("void");
+                nodo.setType("boolean");
             } else {
+                error += "\""+ nodo.getChild(1).getChild(0).getText()+"\" needs 2 boolean expressions\n";
                 nodo.setType("type_error");
             }
         }
@@ -374,8 +415,9 @@ public class sistemaTipos {
             eqExp = typeEqExp(eqExp); 
             
             if (relExp.getType().equals("int")&&eqExp.getType().equals("int")) {
-                nodo.setType("void");
+                nodo.setType("int");
             } else {
+                error += "\""+ nodo.getChild(1).getChild(0).getText() +"\" needs 2 int expressions\n";
                 nodo.setType("type_error");
             }
         }
@@ -397,8 +439,10 @@ public class sistemaTipos {
             eqExp = typeEqExp(eqExp); 
             
             if (addExp.getType().equals(eqExp.getType())&&!(addExp.getType().equals("type_error")||addExp.getType().equals("void"))) {
-                nodo.setType("void");
+                nodo.setType("boolean");
             } else {
+                error += "\""+ nodo.getChild(1).getChild(0).getText() +"\" needs 2 expressions of the same type\n";
+                
                 nodo.setType("type_error");
             }
         }
@@ -420,8 +464,10 @@ public class sistemaTipos {
             mulExp = typeMultExp(mulExp); 
             
             if (mulExp.getType().equals("int")&&addExp.getType().equals("int")) {
-                nodo.setType("void");
+                nodo.setType("int");
             } else {
+                error += "\""+ nodo.getChild(1).getChild(0).getText() +"\" needs 2 int expressions\n";
+                
                 nodo.setType("type_error");
             }
         }
@@ -443,8 +489,9 @@ public class sistemaTipos {
             mulExp = typeMultExp(mulExp); 
             
             if (mulExp.getType().equals("int")&&negExp.getType().equals("int")) {
-                nodo.setType("void");
+                nodo.setType("int");
             } else {
+                error += "\""+ nodo.getChild(1).getChild(0).getText() +"\" needs 2 int expressions\n";
                 nodo.setType("type_error");
             }
         }
@@ -452,7 +499,7 @@ public class sistemaTipos {
     }
     
     private myNode typeNegateExp(myNode nodo) {
-        myNode ind = nodo.getChild(0);
+        myNode ind = nodo.getChild(0); 
         if (ind.getText().equals("value")) {
             ind = typeValue(ind);
             nodo.setType(ind.getType());
@@ -461,6 +508,8 @@ public class sistemaTipos {
             if (ind.getType().equals("boolean")) {
                 nodo.setType(ind.getType());
             } else {
+                error += "\"!\" needs a boolean expression\n";
+                
                 nodo.setType("type_error");
             }
         } else if (ind.getText().equals("-")) {
@@ -468,6 +517,7 @@ public class sistemaTipos {
             if (ind.getType().equals("int")) {
                 nodo.setType(ind.getType());
             } else {
+                error += "\"-\" needs a int expression\n";
                 nodo.setType("type_error");
             }
         }  
@@ -518,9 +568,14 @@ public class sistemaTipos {
                     error += "ID "+idNode.getText()+" no es un struct en el ambito "+actual.getName()+"\n";
                     nodo.setType("type_error");
                 } else {
+                    String structName = symbolType.getType_name(); 
+                    Struct struct = searchStructByName(structName); 
+                    lastScope = actual; 
+                    actual = struct.getInnerScope();
                     myNode location = nodo.getChild(2);
                     location = typeLocation(location);
                     nodo.setType(location.getType());
+                    actual = lastScope; 
                 }
             } else if (body.size() == 4) {
                 if (!symbolType.isArray()) {
@@ -530,7 +585,14 @@ public class sistemaTipos {
                     error += "ID "+idNode.getText()+"es un struct en el ambito "+actual.getName()+", falta el atributo necesario\n";
                     nodo.setType("type_error");
                 } else {
-                    nodo.setType(symbol.getTipo().getType_name());
+                    myNode expression = nodo.getChild(2);
+                    expression = typeExpression(expression); 
+                    if (expression.getType().equals("int")) {       
+                        nodo.setType(symbol.getTipo().getType_name());
+                    } else {
+                        nodo.setType("type_error");
+                        error += "Expression in a array index must be int\n";
+                    }
                 }  
             } else if (body.size() == 6) {
                 if (!symbolType.isArray()) {
@@ -540,9 +602,21 @@ public class sistemaTipos {
                     error += "ID "+idNode.getText()+"no es un struct en el ambito "+actual.getName()+", falta el atributo necesario\n";
                     nodo.setType("type_error");
                 } else {
-                    myNode location = nodo.getChild(5);
-                    location = typeLocation(location);
-                    nodo.setType(location.getType());
+                    myNode expression = nodo.getChild(2);
+                    expression = typeExpression(expression); 
+                    if (expression.getType().equals("int")) {       
+                        String structName = symbolType.getType_name(); 
+                        Struct struct = searchStructByName(structName); 
+                        lastScope = actual; 
+                        actual = struct.getInnerScope();
+                        myNode location = nodo.getChild(5);
+                        location = typeLocation(location);
+                        nodo.setType(location.getType());
+                        actual = lastScope;
+                    }else {
+                        nodo.setType("type_error");
+                        error += "Expression in a array index must be int\n";
+                    }
                 }
             }
         } else {
@@ -552,6 +626,25 @@ public class sistemaTipos {
         return nodo;
     }
     
+    private Struct searchStructByName (String id) {
+        Struct struct = null;
+        int i = 0; 
+        boolean found = false; 
+        while (i < structTable.size() && !found) {
+            Struct temp = structTable.get(i);
+            if (temp.getId().equals(id)) {
+                Scope scope = temp.getScope();
+                ArrayList reach = new ArrayList(); 
+                reach = scopeReach(reach,scope);
+                if (reach.contains(actual.getName())) {
+                    found = true; 
+                    struct = temp; 
+                }
+            }
+            i++; 
+        }
+    return struct;
+    }
     private Symbol searchSymbolByName(String id){
         Symbol symbol = null;
         int i = 0; 
@@ -576,7 +669,7 @@ public class sistemaTipos {
         myNode args = nodo.getChild(2);
         ArrayList params = paramsDecl(args); 
         Method method = searchMethodByID(idNode.getText()); 
-        if (method == null) {
+        if (method != null) {
             ArrayList<Symbol> sign = paramsList.get(Integer.parseInt(method.getInnerScope().getName()));
 
             if (params.size() == sign.size()) {
