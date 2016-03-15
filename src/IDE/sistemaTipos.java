@@ -196,9 +196,9 @@ public class sistemaTipos {
     private myNode typeStatement(myNode nodo) {
         myNode statement = nodo.getChild(0);
         if (statement.getText().equals("statement_cerrado")) {
-            nodo = typeStatementCerrado(nodo); 
-        } else if (statement.getText().equals("statement_cerrado")) {
-            
+            statement = typeStatementCerrado(statement); 
+        } else if (statement.getText().equals("statement_abierto")) {
+            statement = typeStatementAbierto(statement);
         } 
         return nodo; 
     }
@@ -215,14 +215,127 @@ public class sistemaTipos {
             stmtCerrado1 = typeStatementCerrado(stmtCerrado1); 
             stmtCerrado2 = typeStatementCerrado(stmtCerrado2); 
             
-            if (expression.getType().equals("boolean")) {
+            if (expression.getType().equals("boolean") && stmtCerrado1.getType().equals("void")&& stmtCerrado2.getType().equals("void")) {
                 nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
             }
-         }
+            
+            if (!expression.getType().equals("boolean")) {
+                error += "Boolean expression expected in IF declaration";
+            }
+        } else if (nodeText.equals("while")) {
+            myNode expression = nodo.getChild(2);
+            myNode block = nodo.getChild(4);
+             
+            expression = typeExpression(expression);
+            block = typeExpression(block);
+            
+            if (expression.getType().equals("boolean") && block.getType().equals("void")) {
+                nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
+            }
+            
+            if (!expression.getType().equals("boolean")) {
+                error += "Boolean expression expected in WHILE declaration";
+            }
+        } else if (nodeText.equals("return")) {
+            myNode expressionA = nodo.getChild(1);
+            
+            expressionA = typeExpressionA(expressionA); 
+            
+            nodo.setType(expressionA.getType());
+        }else if (nodeText.equals("methodCall")) {
+            firstNode = typeMethodCall(firstNode);
+            
+            if (!firstNode.getType().equals("type_error")) {
+                nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
+            }
+        }else if (nodeText.equals("block")) {
+            firstNode = typeBlock(firstNode);
+            
+            if (!firstNode.getType().equals("type_error")) {
+                nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
+            }
+        }else if (nodeText.equals("location")) {
+            myNode location = firstNode; 
+            myNode expression = nodo.getChild(2);
+            
+            location = typeLocation(location);
+            expression = typeExpression(expression); 
+            
+            if (location.getType().equals(expression.getType())) {
+                nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
+                error += expression.getType()+" cannot be store in "+location.getType()+" variable";
+            }
+        }else if (nodeText.equals("expression")) {
+            firstNode = typeExpression(firstNode); 
+            
+            if (!firstNode.getType().equals("type_error")) {
+                nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
+            }
+        }else if (nodeText.equals(";")) {
+            nodo.setType("void");
+        } 
         return nodo; 
     }
     
+    private myNode typeStatementAbierto(myNode nodo) {
+        if (nodo.getAllChildren().size() == 5) {
+            myNode expression = nodo.getChild(2);
+            myNode statement = nodo.getChild(4);
+            
+            expression = typeExpression(expression);
+            statement = typeStatement(statement); 
+            
+            if (expression.getType().equals("boolean") && !statement.getType().equals("type_error")) {
+                nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
+            }
+            if (!expression.getType().equals("boolean")) {
+                error += "Boolean expression expected in IF declaration";
+            }
+        } else {
+            myNode expression = nodo.getChild(2);
+            myNode statementCerrado = nodo.getChild(4);
+            myNode statementAbierto = nodo.getChild(6); 
+            
+            expression = typeExpression(expression);
+            statementCerrado = typeStatementCerrado(statementCerrado); 
+            statementAbierto = typeStatementAbierto(statementAbierto); 
+            
+            if (expression.getType().equals("boolean") && !statementCerrado.getType().equals("type_error") && !statementAbierto.getType().equals("type_error")) {
+                nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
+            }
+            if (!expression.getType().equals("boolean")) {
+                error += "Boolean expression expected in IF declaration";
+            }
+        }
+        return nodo; 
+    }
     
+    private myNode typeExpressionA (myNode nodo) {
+        if (nodo.getAllChildren().size() > 0) {
+            myNode expression = nodo.getChild(0);
+            expression = typeExpression(expression);
+            nodo.setType(expression.getType()); 
+        } else {
+            nodo.setType("void");
+        }
+        return nodo; 
+    }
     private myNode typeExpression(myNode nodo) {
         if (nodo.getAllChildren().size() == 1) {
             myNode relExp = nodo.getChild(0);
@@ -260,7 +373,7 @@ public class sistemaTipos {
             relExp = typeRelExp(relExp);
             eqExp = typeEqExp(eqExp); 
             
-            if (relExp.getType().equals(eqExp.getType())&&!(relExp.getType().equals("type_error")||relExp.getType().equals("void"))) {
+            if (relExp.getType().equals("int")&&eqExp.getType().equals("int")) {
                 nodo.setType("void");
             } else {
                 nodo.setType("type_error");
@@ -270,10 +383,195 @@ public class sistemaTipos {
     }
     
     private myNode typeEqExp(myNode nodo ){
+        if (nodo.getAllChildren().size() == 1) {
+            myNode addExp = nodo.getChild(0);
+            
+            addExp = typeAddExp(addExp);
+            
+            nodo.setType(addExp.getType());
+        } else {
+            myNode addExp = nodo.getChild(0);
+            myNode eqExp = nodo.getChild(2);
+            
+            addExp = typeAddExp(addExp);
+            eqExp = typeEqExp(eqExp); 
+            
+            if (addExp.getType().equals(eqExp.getType())&&!(addExp.getType().equals("type_error")||addExp.getType().equals("void"))) {
+                nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
+            }
+        }
+        return nodo;  
+    }
+    
+    private myNode typeAddExp(myNode nodo ){
+        if (nodo.getAllChildren().size() == 1) {
+            myNode mulExp = nodo.getChild(0);
+            
+            mulExp = typeMultExp(mulExp);
+            
+            nodo.setType(mulExp.getType());
+        } else {
+            myNode addExp = nodo.getChild(2);
+            myNode mulExp = nodo.getChild(0);
+            
+            addExp = typeAddExp(addExp);
+            mulExp = typeMultExp(mulExp); 
+            
+            if (mulExp.getType().equals("int")&&addExp.getType().equals("int")) {
+                nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
+            }
+        }
+        return nodo;  
+    }
+    
+    private myNode typeMultExp(myNode nodo ){
+        if (nodo.getAllChildren().size() == 1) {
+            myNode negExp = nodo.getChild(0);
+            
+            negExp = typeNegateExp(negExp);
+            
+            nodo.setType(negExp.getType());
+        } else {
+            myNode negExp = nodo.getChild(0);
+            myNode mulExp = nodo.getChild(2);
+            
+            negExp = typeNegateExp(negExp);
+            mulExp = typeMultExp(mulExp); 
+            
+            if (mulExp.getType().equals("int")&&negExp.getType().equals("int")) {
+                nodo.setType("void");
+            } else {
+                nodo.setType("type_error");
+            }
+        }
+        return nodo;  
+    }
+    
+    private myNode typeNegateExp(myNode nodo) {
+        myNode ind = nodo.getChild(0);
+        if (ind.getText().equals("value")) {
+            ind = typeValue(ind);
+            nodo.setType(ind.getType());
+        } else if (ind.getText().equals("!")) {
+            ind = typeValue(ind);
+            if (ind.getType().equals("boolean")) {
+                nodo.setType(ind.getType());
+            } else {
+                nodo.setType("type_error");
+            }
+        } else if (ind.getText().equals("-")) {
+            ind = typeValue(ind);
+            if (ind.getType().equals("int")) {
+                nodo.setType(ind.getType());
+            } else {
+                nodo.setType("type_error");
+            }
+        }  
         return nodo; 
     }
     
-    private myNode methodCall(myNode nodo) {
+    private myNode typeValue(myNode nodo) {
+        myNode ind = nodo.getChild(0);
+        if (ind.getText().equals("literal")) {
+            ind = typeLiteral(ind);
+            nodo.setType(ind.getType());
+        } else if (ind.getText().equals("(")) {
+            ind = nodo.getChild(1);
+            ind = typeExpression(ind);
+            nodo.setType(ind.getType());
+        } else if (ind.getText().equals("methodCall")) {
+            ind = typeMethodCall(ind);
+            nodo.setType(ind.getType());
+        } else if (ind.getText().equals("location")) {
+            ind = typeLocation(ind);
+            nodo.setType(ind.getType());
+        } 
+        return nodo; 
+    }
+    
+    
+    private myNode typeLocation(myNode nodo) {
+        ArrayList<myNode> body = nodo.getAllChildren(); 
+        myNode idNode = nodo.getChild(0); 
+        Symbol symbol = searchSymbolByName(idNode.getText());
+        if (symbol != null) {
+            Type symbolType = symbol.getTipo(); 
+            if (body.size() == 1) {
+                if (symbolType.isArray()) {
+                    error += "ID "+idNode.getText()+" es un array en el ambito "+actual.getName()+", falta el indice necesario\n";
+                    nodo.setType("type_error");
+                } else if (symbolType.isStructure()) {
+                    error += "ID "+idNode.getText()+" es un struct en el ambito "+actual.getName()+", falta el atributo necesario\n";
+                    nodo.setType("type_error");
+                } else {
+                    nodo.setType(symbol.getTipo().getType_name());
+                }  
+            } else if (body.size() == 3) {
+                if (symbolType.isArray()) {
+                    error += "ID "+idNode.getText()+" es un array en el ambito "+actual.getName()+", falta el indice necesario\n";
+                    nodo.setType("type_error");
+                } else if (!symbolType.isStructure()) {
+                    error += "ID "+idNode.getText()+" no es un struct en el ambito "+actual.getName()+"\n";
+                    nodo.setType("type_error");
+                } else {
+                    myNode location = nodo.getChild(2);
+                    location = typeLocation(location);
+                    nodo.setType(location.getType());
+                }
+            } else if (body.size() == 4) {
+                if (!symbolType.isArray()) {
+                    error += "ID "+idNode.getText()+" no es un array en el ambito "+actual.getName()+"\n";
+                    nodo.setType("type_error");
+                } else if (symbolType.isStructure()) {
+                    error += "ID "+idNode.getText()+"es un struct en el ambito "+actual.getName()+", falta el atributo necesario\n";
+                    nodo.setType("type_error");
+                } else {
+                    nodo.setType(symbol.getTipo().getType_name());
+                }  
+            } else if (body.size() == 6) {
+                if (!symbolType.isArray()) {
+                    error += "ID "+idNode.getText()+" no es un array en el ambito "+actual.getName()+"\n";
+                    nodo.setType("type_error");
+                } else if (!symbolType.isStructure()) {
+                    error += "ID "+idNode.getText()+"no es un struct en el ambito "+actual.getName()+", falta el atributo necesario\n";
+                    nodo.setType("type_error");
+                } else {
+                    myNode location = nodo.getChild(5);
+                    location = typeLocation(location);
+                    nodo.setType(location.getType());
+                }
+            }
+        } else {
+                error += "Variable "+idNode.getText()+" no existe en el ambito "+actual.getName()+"\n";
+                nodo.setType("type_error"); 
+        }
+        return nodo;
+    }
+    
+    private Symbol searchSymbolByName(String id){
+        Symbol symbol = null;
+        int i = 0; 
+        boolean found = false; 
+        while (i < symbolTable.size() && !found) {
+            Symbol temp = symbolTable.get(i);
+            if (temp.getId().equals(id)) {
+                Scope scope = temp.getScope();
+                ArrayList reach = new ArrayList(); 
+                reach = scopeReach(reach,scope);
+                if (reach.contains(actual.getName())) {
+                    found = true; 
+                    symbol = temp; 
+                }
+            }
+            i++; 
+        }
+        return symbol; 
+    }
+    private myNode typeMethodCall(myNode nodo) {
         myNode idNode = nodo.getChild(0);
         myNode args = nodo.getChild(2);
         ArrayList params = paramsDecl(args); 
@@ -414,7 +712,6 @@ public class sistemaTipos {
                 list.add(symbol); 
             }
         }
-        //paramsList.remove(Integer.parseInt(scope.getName()));
         paramsList.add(Integer.parseInt(scope.getName()),list);
     }
     
