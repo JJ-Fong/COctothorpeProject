@@ -8,15 +8,14 @@ grammar expDecaf2;
 
 //********* LEXER ******************
 fragment LETTER: ('a'..'z'|'A'..'Z') ;
-fragment DIGIT : '0'..'9' ;
+fragment DIGIT : '0'..'9' ; 
+
 ID : LETTER( LETTER | DIGIT)* ;
 NUM: DIGIT(DIGIT)* ;
 COMMENTS: '//' ~('\r' | '\n' )*  -> channel(HIDDEN);
-WS : [ \t\r\n\f | ' ' | '\r' | '\n' | '\t']+  ->channel(HIDDEN); 
+WS : [ \t\r\n]+ -> skip ; 
 
-CHAR: (LETTER|DIGIT|' '| '!' | '"' | '#' | '$' | '%' | '&' | '\'' | '(' | ')' | '*' | '+' 
-| ',' | '-' | '.' | '/' | ':' | ';' | '<' | '=' | '>' | '?' | '@' | '[' | '\\' | ']' | '^' | '_' | '`'| '{' | '|' | '}' | '~' 
-'\t'| '\n' | '\"' | '\'');
+CHAR : '\'' ( ~['\r\n\\] | '\\' ['\\] ) '\'';
 
 
 // ********** PARSER *****************
@@ -66,15 +65,15 @@ expressionA: expression | ;
 
 location : (ID|ID '[' expression ']') ('.' location)?  ;
 
-expression :  rel_Exp | rel_Exp conditionalop expression ;
+expression : rel_Exp | expression conditionalop rel_Exp ;
 
-rel_Exp :  eq_Exp | eq_Exp relop rel_Exp ; 
+rel_Exp :  eq_Exp | rel_Exp relop eq_Exp ; 
 
-eq_Exp : add_Exp | add_Exp eqop eq_Exp; 
+eq_Exp : add_Exp | eq_Exp eqop add_Exp; 
 
-add_Exp :  mult_Exp| mult_Exp addop add_Exp; 
+add_Exp :  mult_Exp| add_Exp addop mult_Exp; 
 
-mult_Exp : negate_Exp | negate_Exp mulop mult_Exp  ; 
+mult_Exp : negate_Exp | mult_Exp mulop negate_Exp  ; 
 
 negate_Exp : value | '!'  value  | '-' value   ;
 
@@ -88,7 +87,7 @@ addop : '+' | '-';
 
 mulop : '*' | '/' | '%';
 
-value :  literal | '(' expression ')' | methodCall | location;
+value : '(' expression ')' | methodCall | location | literal;
 
 methodCall :    ID '(' arg1 ')' ;
 
@@ -98,10 +97,12 @@ arg2    :   (arg) (',' arg)* ;
 
 arg :   expression;
 
-literal : int_literal | char_literal | bool_literal ;
+literal : char_literal | int_literal |  bool_literal ;
 
 int_literal : NUM ;
 
-char_literal : '\\' CHAR '\\' ;
+char_literal :  CHAR ;
 
 bool_literal : 'true' | 'false' ;
+
+

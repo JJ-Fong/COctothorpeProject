@@ -252,8 +252,7 @@ public class mainView extends javax.swing.JFrame {
         if (mstk.equals("")) { 
             mstk = "Program Parceable";
             errores.setText(mstk);
-            view = new TreeViewer(Arrays.asList(
-            parser.getRuleNames()),tree);
+            view = new TreeViewer(Arrays.asList(parser.getRuleNames()),tree);
             view.setScale(1.5);
             ParseTree hijo = tree.getChild(0);
             ParseTree arbolGen = hijo.getParent();

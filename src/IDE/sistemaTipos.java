@@ -200,6 +200,10 @@ public class sistemaTipos {
                 blockNode = typeBlock(blockNode);
                 actual = lastScope; 
                 nodo.setType(blockNode.getType());
+                if (!nodo.getType().equals(type.getType_name())) {
+                    error += "Invalid METHOD DECLARATION "+method.getId()+"- Return must be the same type as header\n";
+                    nodo.setType("type_error"); 
+                }
             } else { 
                 eraseMethodTrack(method); 
             }
